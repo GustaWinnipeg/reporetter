@@ -162,3 +162,44 @@ func List(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(ServerDetails)
 }
+
+
+func main() {
+	port := ":" + os.Getenv("PORT")
+	router := gin.Default()
+
+	router.Use(secure.New(secure.Config{
+		SSLRedirect:          true,
+		SSLHost:              "np.pogge.rs",
+		STSSeconds:           315360000,
+		STSIncludeSubdomains: false,
+		FrameDeny:            true,
+		ContentTypeNosniff:   true,
+		BrowserXssFilter:     true,
+		SSLProxyHeaders:      map[string]string{"X-Forwarded-Proto": "https"},
+	}))
+
+	// Serve frontend static files
+	router.Use(static.Serve("/", static.LocalFile("./public", true)))
+
+	// Setup route group for the API
+	api := router.Group("/api")
+	{
+		api.GET("/", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "Nothing to see here.",
+			})
+		})
+	}
+
+	// List handler for /api/list
+	api.GET("/list", ListHandler)
+
+	// Run the Gin router
+	if err := router.Run(port); err != nil {
+		log.Fatalf("Gin fatal error: %v", err)
+	} else {
+		log.Printf("Listening on %s...\n", port)
+	}
+}
+
