@@ -209,7 +209,37 @@ func ListHandler(c *gin.Context) {
 
 
 
+func getServerQueue() (err error) {
+	serverData := make([]byte, 256)
+	serverConnection, err := net.Dial("udp", ServerAddress)
+	if err != nil {
+		return err
+	} else {
+		defer serverConnection.Close()
+	}
 
+	// UDP voodoo to get server info -- https://github.com/LiquidObsidian/fivereborn-query/blob/master/index.js#L54
+	fmt.Fprintf(serverConnection, "\xFF\xFF\xFF\xFFgetinfo f")
+	_, err = bufio.NewReader(serverConnection).Read(serverData)
+
+	if err == nil {
+		serverData := bytes.Split(serverData, []byte("\n"))
+		serverDetails := bytes.Split(serverData[1], []byte("\\"))
+		serverQueue := bytes.FieldsFunc(serverDetails[12], func(c rune) bool { return c == '[' || c == ']' })
+
+		currentPlayerValues, _ := strconv.ParseInt(string(serverDetails[4]), 0, 64)
+		currentserverQueueValues, _ := strconv.ParseInt(string(serverQueue[0]), 0, 64)
+		ServerDetails.ServerQueue.CurrentPlayers = currentPlayerValues
+
+		if currentserverQueueValues >= 1 {
+			ServerDetails.ServerQueue.CurrentQueue = currentserverQueueValues
+		}
+	} else {
+		return err
+	}
+
+	return
+}
 func main() {
 	port := ":" + os.Getenv("PORT")
 	router := gin.Default()
