@@ -171,6 +171,44 @@ func List(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(ServerDetails)
 }
 
+func ListHandler(c *gin.Context) {
+	// Load players JSON
+	err := loadPlayersJSON()
+	if err != nil {
+		log.Fatalf("Failed to load players JSON:  %v", err)
+		return
+	}
+
+	// Get player list
+	err = getPlayerList()
+	if err != nil {
+		log.Fatalf("Failed to get player list:  %v", err)
+		return
+	}
+
+	// Get server queue count
+	err = getServerQueue()
+	if err != nil {
+		log.Fatalf("Failed to get server queue count:  %v", err)
+		return
+	}
+
+	// Parse players JSON
+	err = parsePlayers()
+	if err != nil {
+		log.Fatalf("Failed to parse players JSON:  %v", err)
+		return
+	}
+
+	c.Header("Content-Type", "application/json")
+	c.Header("Access-Control-Allow-Origin", "*")
+
+	c.JSON(http.StatusOK, ServerDetails)
+}
+
+
+
+
 
 func main() {
 	port := ":" + os.Getenv("PORT")
