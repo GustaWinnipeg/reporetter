@@ -1,4 +1,4 @@
-module github.com/GustaWinnipeg/npqueue
+module github.com/GustaWinnipeg/reporetter
 
 go 1.13
 
