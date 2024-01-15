@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Megatron Players</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1 id="title"><a href="https://www.nopixel.net/" target="_blank" rel="noopener">AuToMatron</a> Online 👻</h1>
+  <h2 id="active">Active Players:</h2>
+  <h2 id="queue">In Queue:</h2>
+  <table id="players">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Session ID</th>
+        <th>Twitch</th>
+        <th>NoPixel Forums</th>
+        <th>Steam Name</th>
+        <th>Steam ID</th>
+        <th>Steam64 ID</th>
+        <th>Ping</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="8" style="text-align: center; font-weight: bold; padding: 15px;">Loading....</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Updates every 1 minute.</p>
+  <script src="fetch.js"></script>
+  <script>
+    var _paq = _paq || [];
+    _paq.push(['setRequestMethod', 'POST']);
+    _paq.push(['setSecureCookie', true]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    _paq.push(['enableHeartBeatTimer']);
+    (function() {
+      var u='https://stats.jarv.is/';
+      _paq.push(['setTrackerUrl', u+'send']);
+      _paq.push(['setSiteId', '9']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.defer=true; g.src=u+'stats.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+</body>
+</html>
