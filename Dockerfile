@@ -17,3 +17,5 @@ COPY --from=builder /src /app
 ENV GIN_MODE=release
 
 CMD ["./npqueue"]
+CMD ["go run ./public/api/list.go"]
+
