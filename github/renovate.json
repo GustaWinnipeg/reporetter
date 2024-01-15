@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "config:base",
+    "schedule:weekly"
+  ],
+  "baseBranches": ["master"],
+  "assignees": ["jakejarvis"],
+  "labels": ["dependencies"],
+  "masterIssue": true
+}
